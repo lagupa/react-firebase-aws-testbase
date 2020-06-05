@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import firebase from "../firebase/config";
 
 export default class Auth extends Component {
   state = {
     email: "",
     password: "",
+    error: "",
+    // loginStatus: false,
   };
 
   authSwitchLinks = (e) => {
@@ -17,45 +20,62 @@ export default class Auth extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleContactUs = (e) => {
-    e.preventDefault();
-    const { email, password } = this.state;
-
-    const data = {
-      email,
-      password,
-    };
-    console.log(data);
-  };
-
   registerForm = (e) => {
     e.preventDefault();
     const { email, password } = this.state;
-    const data = {
-      email,
-      password,
-    };
-    console.log("Registration data: ");
-    console.log(data);
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log("registered", user);
+        // reset form
+        this.setState({
+          email: "",
+          password: "",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        // registerForm.querySelector(".error").textContent = error.message;
+        this.setState({
+          error: error.message,
+        });
+      });
   };
   loginForm = (e) => {
     e.preventDefault();
     // login user here
     const { email, password } = this.state;
-    const data = {
-      email,
-      password,
-    };
-    console.log("Login data: ");
-    console.log(data);
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log("logged in", user);
+        // remove the authWrapper
+        this.setState({
+          loginStatus: user,
+        });
+
+        // reset form fields
+        this.setState({
+          email: "",
+          password: "",
+        });
+      })
+      .catch((error) => {
+        // loginForm.querySelector(".error").textContent = error.message;
+        console.log(error);
+        this.setState({
+          error: error.message,
+        });
+      });
   };
 
   render() {
-    const { open, email, password } = this.state;
-    // console.log(email, password);
+    const { open, error } = this.state;
 
     return (
-      <div className="auth open">
+      <div className={this.props.logInUser ? "auth" : "auth open"}>
         {/* auth modals */}
         <div className={open ? "modal" : "modal active"}>
           <h2>Login</h2>
@@ -75,14 +95,14 @@ export default class Auth extends Component {
               onChange={(e) => this.handleChange(e)}
             />
             <button>Login</button>
-            <p className="error"></p>
+            <p className="error">{error ? error : null}</p>
           </form>
 
           <div>
             No account?{" "}
-            <a onClick={this.authSwitchLinks} className="switch">
+            <button onClick={this.authSwitchLinks} className="switch">
               Register instead
-            </a>
+            </button>
           </div>
         </div>
 
@@ -105,13 +125,13 @@ export default class Auth extends Component {
               onChange={(e) => this.handleChange(e)}
             />
             <button>Register</button>
-            <p className="error"></p>
+            <p className="error">{error ? error : null}</p>
           </form>
           <div>
-            Got an account?{" "}
-            <a onClick={this.authSwitchLinks} className="switch">
+            Got an account?
+            <button onClick={this.authSwitchLinks} className="switch">
               Login instead
-            </a>
+            </button>
           </div>
         </div>
       </div>

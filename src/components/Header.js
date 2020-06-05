@@ -5,8 +5,10 @@ class Header extends Component {
     return (
       <header>
         <nav>
-          <a className="add-request">add request</a>
-          <a className="sign-out">sign out</a>
+          <button className="add-request">add request</button>
+          <button onClick={() => this.props.logOut()} className="sign-out">
+            sign out
+          </button>
         </nav>
       </header>
     );
