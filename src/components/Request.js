@@ -17,31 +17,25 @@ class Request extends Component {
 
     // save the request data
     const { request } = this.state;
-    firebase
-      .functions()
-      .httpsCallable("addRequest", { text: request })
+
+    var addRequest = firebase.functions().httpsCallable("addRequest");
+
+    addRequest({ text: request })
       .then(() => {
-        // requestForm.reset();
-        // requestForm.querySelector(".error").textContent = "";
         this.setState({
           request: "",
           error: "",
         });
-        // requestModal.classList.remove("open");
         this.props.closeRequestModal();
       })
       .catch((error) => {
         if (error.message === "INTERNAL") {
-          // requestForm.reset();
           this.setState({
             request: "",
             error: "",
           });
-
-          // requestModal.classList.remove("open");
           this.props.closeRequestModal();
         } else {
-          // requestForm.querySelector(".error").textContent = error.message;
           this.setState({ error: error.message });
         }
       });

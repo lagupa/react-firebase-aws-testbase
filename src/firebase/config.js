@@ -3,6 +3,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
+import "firebase/functions";
 
 // Learn more on how to set up firebase
 // https://firebase.google.com/docs/web/setup#using-module-bundlers
@@ -21,5 +22,9 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 // firebase.analytics();
+
+var functions = firebase.functions();
+
+export { functions };
 
 export default firebase;

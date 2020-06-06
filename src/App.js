@@ -49,8 +49,7 @@ class App extends Component {
       openReqModal: true,
     });
   };
-  closeRequestModal = (e) => {
-    e.preventDefault();
+  closeRequestModal = () => {
     console.log("closing request modal");
     // close the request modal
     this.setState({
