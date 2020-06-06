@@ -5,7 +5,12 @@ class Header extends Component {
     return (
       <header>
         <nav>
-          <button className="add-request">add request</button>
+          <button
+            onClick={() => this.props.openRequestModal()}
+            className="add-request"
+          >
+            add request
+          </button>
           <button onClick={() => this.props.logOut()} className="sign-out">
             sign out
           </button>

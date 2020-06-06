@@ -9,6 +9,7 @@ import "./App.css";
 class App extends Component {
   state = {
     loginStatus: false,
+    openReqModal: false,
   };
   componentDidMount() {
     this.authWatch();
@@ -42,14 +43,34 @@ class App extends Component {
         // this.authWatch();
       });
   };
+  openRequestModal = () => {
+    console.log("opening request modal");
+    this.setState({
+      openReqModal: true,
+    });
+  };
+  closeRequestModal = (e) => {
+    e.preventDefault();
+    console.log("closing request modal");
+    // close the request modal
+    this.setState({
+      openReqModal: false,
+    });
+  };
   render() {
     // console.log(this.state.loginStatus);
 
     return (
       <div className="App">
         <Auth logInUser={this.state.loginStatus} />
-        <Request />
-        <Header logOut={this.signOut} />
+        <Request
+          openReqModal={this.state.openReqModal}
+          closeRequestModal={this.closeRequestModal}
+        />
+        <Header
+          openRequestModal={this.openRequestModal}
+          logOut={this.signOut}
+        />
         <ListTutorial />
       </div>
     );
