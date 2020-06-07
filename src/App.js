@@ -10,6 +10,7 @@ class App extends Component {
   state = {
     loginStatus: false,
     openReqModal: false,
+    error: "",
   };
   componentDidMount() {
     this.authWatch();
@@ -56,11 +57,41 @@ class App extends Component {
       openReqModal: false,
     });
   };
+  // vote
+  upvoteRequest = (id) => {
+    console.log(id);
+    const upvote = firebase.functions().httpsCallable("upvote");
+    upvote({ id }).catch((error) => {
+      console.log(error);
+      this.showNotification(error.message);
+    });
+  };
+
+  // notification
+  // const notification = document.querySelector(".notification");
+
+  showNotification = (message) => {
+    this.setState({
+      error: message,
+    });
+    setTimeout(() => {
+      // notification.classList.remove("active");
+      this.setState({
+        error: "",
+      });
+    }, 4000);
+  };
+
   render() {
+    const { error } = this.state;
     // console.log(this.state.loginStatus);
 
     return (
       <div className="App">
+        <div className={error ? "notification active" : "notification"}>
+          {this.state.error}
+        </div>
+
         <Auth logInUser={this.state.loginStatus} />
         <Request
           openReqModal={this.state.openReqModal}
@@ -70,7 +101,7 @@ class App extends Component {
           openRequestModal={this.openRequestModal}
           logOut={this.signOut}
         />
-        <ListTutorial />
+        <ListTutorial upvoteRequest={this.upvoteRequest} />
       </div>
     );
   }

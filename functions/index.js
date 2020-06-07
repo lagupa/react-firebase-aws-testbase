@@ -85,6 +85,5 @@ exports.logActivities = functions.firestore
     if (collection === "users") {
       return activities.add({ text: "a new user signed up" });
     }
-
     return null;
   });

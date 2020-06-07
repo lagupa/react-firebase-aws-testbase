@@ -10,7 +10,7 @@ class Header extends Component {
             className="add-request"
           >
             add request
-          </button>
+          </button>{" "}
           <button onClick={() => this.props.logOut()} className="sign-out">
             sign out
           </button>

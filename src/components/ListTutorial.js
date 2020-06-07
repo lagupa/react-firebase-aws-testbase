@@ -26,15 +26,6 @@ export class ListTutorial extends Component {
     });
   };
 
-  // vote
-  upvoteRequest = (id) => {
-    //console.log(id);
-    const upvote = firebase.functions().httpsCallable("upvote");
-    upvote({ id }).catch((error) => {
-      console.log(error);
-      // showNotification(error.message);
-    });
-  };
   render() {
     const { tutorialsRequests } = this.state;
     return (
@@ -46,7 +37,12 @@ export class ListTutorial extends Component {
               <span className="text">{tut.text}</span>
               <div>
                 <span className="votes">{tut.upvotes}</span>
-                <i className="material-icons upvote">arrow_upward</i>
+                <i
+                  onClick={() => this.props.upvoteRequest(tut.id)}
+                  className="material-icons upvote"
+                >
+                  arrow_upward
+                </i>
               </div>
             </li>
           ))}
